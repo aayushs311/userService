@@ -30,7 +30,7 @@ public class AuthService {
 
     // Custom static way:
     private SecretKey key = Keys.hmacShaKeyFor(
-            "namanisveryveryveryveryveryveryverycool"
+            "aayushisveryveryveryveryveryveryverycool"
                     .getBytes(StandardCharsets.UTF_8));
     private SessionRepository sessionRepository;
 
