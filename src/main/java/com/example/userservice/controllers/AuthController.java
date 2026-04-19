@@ -1,11 +1,13 @@
 package com.example.userservice.controllers;
 
 import com.example.userservice.dtos.*;
+import com.example.userservice.exceptions.UserAlreadyExistException;
 import com.example.userservice.services.AuthService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,14 +21,19 @@ public class AuthController {
     }
 
     @PostMapping("/sign_up")
-    public ResponseEntity<SignUpResponseDto> signUp(SignUpRequestDto request) {
+    public ResponseEntity<SignUpResponseDto> signUp(@RequestBody SignUpRequestDto request) {
         SignUpResponseDto response = new SignUpResponseDto();
-        if(authService.signUp(request.getEmail(), request.getPassword())) {
-            response.setRequestStatus(RequestStatus.SUCCESS);
-        } else {
+        try{
+            if(authService.signUp(request.getEmail(), request.getPassword())) {
+                response.setRequestStatus(RequestStatus.SUCCESS);
+            } else {
+                response.setRequestStatus(RequestStatus.FAILURE);
+            }
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
             response.setRequestStatus(RequestStatus.FAILURE);
+            return new ResponseEntity<>(response, HttpStatus.CONFLICT);
         }
-        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
     @PostMapping("login")
