@@ -70,7 +70,7 @@ public class AuthService {
             Date date = Date.from(
                     futureDateTime.atZone(ZoneId.systemDefault()).toInstant()
             );
-            session.setExpiringAT(date);
+            session.setExpiringAt(date);
 
             sessionRepository.save(session);
 
